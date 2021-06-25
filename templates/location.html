@@ -1,0 +1,34 @@
+ <!DOCTYPE html>
+ <html>
+	 <head>
+		 <title>{{location.title()}} Classification Tool</title>
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
+	 </head>
+	 <body>
+		 <h1>{{location.title()}} Classification Tool</h1>
+
+        <form action="/{{location}}/submit">
+        {% for count, submission in written_submissions.iterrows() %}
+            <h2>Submission: {{ submission["title"] }}</h2>
+            <b>
+                <p>City: {{ submission["city"] }}</p>
+                <p>Time: {{ submission["datetime"] }}</p>
+                <p>Type: {{ submission["districttype"] }}</p>
+                <p>Tags: {{ submission["tags"] }}</p>
+            </b>
+            <p>{{ submission["text"] }}</p>
+            <br>
+            <input type="radio" id="theory" name="{{ submission["id"] }}" value="theory">
+            <label for="theory">theory</label><br>
+            <input type="radio" id="coi" name="{{ submission["id"] }}" value="coi">
+            <label for="coi">coi</label><br>
+            <br>
+            <hr>
+            <br>
+        {% endfor %}
+
+        <input type="submit" value="Submit">
+
+        </form>
+	 </body>
+ </html> 
