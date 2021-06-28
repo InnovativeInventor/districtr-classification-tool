@@ -2,9 +2,13 @@ from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.templating import Jinja2Templates
 import pandas as pd
+import yaml
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
+
+with open("conf.yaml") as f:
+    keywords = yaml.load(f)["keywords"]
 
 @app.get("/", response_class=PlainTextResponse)
 async def read_root() -> str:
