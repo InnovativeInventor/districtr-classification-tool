@@ -51,7 +51,6 @@ async def classify(request: Request, location: str):
     location = location.lower().rstrip()
     written_submissions = nab_written_submission(location)
 
-    print(written_submissions.columns, written_submissions, written_submissions["type"])
     if len(written_submissions):
         return templates.TemplateResponse(
             "location.html",
