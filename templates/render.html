@@ -1,0 +1,51 @@
+ <!DOCTYPE html>
+ <html>
+	 <head>
+		 <title>{{location.title()}} Classification Tool</title>
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
+	 </head>
+	 <body>
+		 <h1>{{location.title()}} Classification Tool</h1>
+	<h5>Copy this snippet into your .tex file</h5>
+
+	<br>
+	<hr>
+	<br>
+
+	<p>
+	\begin{table}
+	\definecolor{written}{rgb}{0.84, 0.04, 0.33}
+	%\definecolor{districts}{rgb}{0.16, 0.5, 0.0}
+	\definecolor{districts}{rgb}{0.0, 0.4, 0.0}
+	\definecolor{COI}{rgb}{0.1, 0.1, 0.44}
+	\hspace{-.5in} {\footnotesize
+	\begin{tabular}{|c||cccc||ccccc||cc|}
+	\hline
+	&\cellcolor{written} \textcolor{white}{\bf WRITTEN} & \cellcolor{written}  \textcolor{white}{\bf theory} & \cellcolor{written}  \textcolor{white}{\bf COI} & \cellcolor{written}  \textcolor{white}{\bf comments} & 
+	\cellcolor{districts} \textcolor{white}{\bf DISTRICTS} & \cellcolor{districts} \textcolor{white}{\bf CD} & \cellcolor{districts} \textcolor{white}{\bf SD} & \cellcolor{districts} \textcolor{white}{\bf HD} & \cellcolor{districts} \textcolor{white}{\bf comments}& 
+	\cellcolor{COI} \textcolor{white}{\bf COI MAP}  & \cellcolor{COI} \textcolor{white}{\bf comments}\\
+	</p>
+
+	{% for count, info in data%}
+		<p>
+		\hline
+		\tablerow{ {{ count }} ({{ info["week_start"].strftime("%m/%d/%y") }}) }{ {{ info["written"] }} }{ {{ info["written_theory"] }} }{ {{ info["written_coi"] }} }{ {{ info["written_comments"] }} }
+		\districtrow{ {{ info["plan"] }} }{ {{ info["cd"] }} }{ {{ info["sd"] }} }{ {{ info["hd"] }} }{ {{ info["plan_comments"] }} }
+		\coirow{ {{ info["coi"] }} }{ {{ info["coi_comments"] }} } \\
+		</p>
+	{% endfor %}
+
+	<p>
+	\hline \hline 
+	TOTAL & {\bf 264} & &&& {\bf 114} &&&&& {\bf 42} & \\
+	\hline
+	\end{tabular}
+	}
+	\caption{Summary of Submissions}
+	\end{table}
+	</p>
+	<br>
+	<hr>
+	<br>
+	</body>
+ </html> 
