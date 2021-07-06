@@ -44,6 +44,14 @@
 	\caption{Summary of Submissions}
 	\end{table}
 	</p>
+	{% if keywords %}
+		<br>
+		{% for id, keyword in keywords%}
+		<p>
+		\example{ {{ id }} }{ {{ keyword }} }
+		</p>
+		{% endfor %}
+	{% endif %}
 	<br>
 	<hr>
 	<br>

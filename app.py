@@ -103,6 +103,14 @@ async def submit(request: Request, location: str):
     ):
         written_df = submissions[submissions["type"] == "written"].fillna("")
         written = len(written_df)
+        written_both = len(
+            submissions[
+                submissions["id"].apply(
+                    lambda x: str(x) in classifications
+                    and classifications[str(x)] == "both"
+                )
+            ]
+        )
         written_theory = len(
             submissions[
                 submissions["id"].apply(
@@ -110,7 +118,7 @@ async def submit(request: Request, location: str):
                     and classifications[str(x)] == "theory"
                 )
             ]
-        )
+        ) + written_both
         written_coi = len(
             submissions[
                 submissions["id"].apply(
@@ -118,7 +126,7 @@ async def submit(request: Request, location: str):
                     and classifications[str(x)] == "coi"
                 )
             ]
-        )
+        ) + written_both
         written_comments = pd.to_numeric(written_df["numberOfComments"]).sum()
 
         districts_df = submissions[submissions["type"] == "written"].fillna("")
@@ -150,11 +158,19 @@ async def submit(request: Request, location: str):
             }
         )
 
+    keywords = []
+    for k, v in classifications.items():
+        if k.endswith("-key") and v.strip():
+            sub_id = k.split("-")[0]
+            keyword = v.rstrip()
+            keywords.append((sub_id, keyword))
+
     return templates.TemplateResponse(
         "render.html",
         {
             "request": request,
             "location": location,
             "data": list(enumerate(data, start=1)),
+            "keywords": keywords
         },
     )
