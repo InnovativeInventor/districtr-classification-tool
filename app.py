@@ -23,11 +23,11 @@ async def read_root() -> str:
 def nab_submissions(location: str, start=False, stop=False) -> pd.DataFrame:
     if location == "michigan":
         submissions = pd.read_csv(
-            f"https://o1siz7rw0c.execute-api.us-east-2.amazonaws.com/beta/submissions/csv/{location}"
+            f"https://o1siz7rw0c.execute-api.us-east-2.amazonaws.com/beta/submissions/csv/{location}?length=10000"
         )
     else:
         submissions = pd.read_csv(
-            f"https://k61e3cz2ni.execute-api.us-east-2.amazonaws.com/prod/submissions/csv/{location}"
+            f"https://k61e3cz2ni.execute-api.us-east-2.amazonaws.com/prod/submissions/csv/{location}?length=10000"
         )
 
     submissions["datetime"] = submissions["datetime"].apply(
@@ -75,18 +75,13 @@ async def classify_filter(request: Request, location: str, start: str, stop: str
 
     written_submissions = nab_written_submission(location, start, stop)
 
-    print(
-        written_submissions.columns,
-        written_submissions_filtered,
-        written_submissions["type"],
-    )
-    if len(written_submissions_filtered):
+    if len(written_submissions):
         return templates.TemplateResponse(
             "location.html",
             {
                 "request": request,
                 "location": location,
-                "written_submissions": written_submissions_filtered,
+                "written_submissions": written_submissions,
             },
         )
     else:
@@ -155,8 +150,11 @@ async def submit(request: Request, location: str):
             }
         )
 
-    print(data)
     return templates.TemplateResponse(
         "render.html",
-        {"request": request, "location": location, "data": list(enumerate(data))},
+        {
+            "request": request,
+            "location": location,
+            "data": list(enumerate(data, start=1)),
+        },
     )
