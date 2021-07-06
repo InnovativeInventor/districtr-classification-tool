@@ -1,7 +1,9 @@
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.templating import Jinja2Templates
+from dateutil import parser
 import pandas as pd
+import pytz
 import yaml
 
 app = FastAPI()
@@ -20,6 +22,8 @@ def nab_written_submission(location: str) -> pd.DataFrame:
     else:
         submissions = pd.read_csv(f"https://k61e3cz2ni.execute-api.us-east-2.amazonaws.com/prod/submissions/csv/{location}")
 
+    submissions["datetime"] = submissions["datetime"].apply(lambda x: parser.parse(x.split("(")[0]))
+
     return submissions[submissions["type"] == "written"].fillna("")
 
 @app.get("/{location}", response_class=HTMLResponse)
@@ -37,6 +41,26 @@ async def classify(request: Request, location: str):
                                           })
     else:
         raise HTTPException(status_code=404, detail=f"No written submissions found for {location}.")
+
+@app.get("/{location}/{start}/{stop}", response_class=HTMLResponse)
+async def classify_filter(request: Request, location: str, start: str, stop: str):
+    location = location.lower().rstrip()
+    start = parser.parse(start).replace(tzinfo=pytz.UTC)
+    stop = parser.parse(stop).replace(tzinfo=pytz.UTC)
+
+    written_submissions = nab_written_submission(location)
+    written_submissions_filtered = written_submissions[written_submissions["datetime"].apply(lambda x: start < x and x < stop)]
+
+    print(written_submissions.columns, written_submissions_filtered, written_submissions["type"])
+    if len(written_submissions_filtered):
+        return templates.TemplateResponse("location.html",
+                                          {
+                                              "request": request,
+                                              "location": location,
+                                              "written_submissions": written_submissions_filtered
+                                          })
+    else:
+        raise HTTPException(status_code=404, detail=f"No written submissions found for {location} between {start} and {stop}.")
 
 @app.get("/{location}/submit", response_class=HTMLResponse)
 async def submit(request: Request, location: str):
