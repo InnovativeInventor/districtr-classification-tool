@@ -12,14 +12,19 @@ with open("conf.yaml") as f:
 
 @app.get("/", response_class=PlainTextResponse)
 async def read_root() -> str:
-    return PlainTextResponse("Go to /{location} to start.")
+    return PlainTextResponse("Go to /{location} (for all submissions) or /{location}/{start-date}/{end-date} to start. E.g. <a href=\"/michigan\">/michigan</a> or <a href=\"/michigan/2021-5-1/2021-5-7\">/michigan/2021-5-1/2021-5-7</a>")
 
 def nab_written_submission(location: str) -> pd.DataFrame:
-    submissions = pd.read_csv(f"https://o1siz7rw0c.execute-api.us-east-2.amazonaws.com/beta/submissions/csv/{location}")
+    if location == "michigan":
+        submissions = pd.read_csv(f"https://o1siz7rw0c.execute-api.us-east-2.amazonaws.com/beta/submissions/csv/{location}")
+    else:
+        submissions = pd.read_csv(f"https://k61e3cz2ni.execute-api.us-east-2.amazonaws.com/prod/submissions/csv/{location}")
+
     return submissions[submissions["type"] == "written"].fillna("")
 
 @app.get("/{location}", response_class=HTMLResponse)
 async def classify(request: Request, location: str):
+    location = location.lower().rstrip()
     written_submissions = nab_written_submission(location)
 
     print(written_submissions.columns, written_submissions, written_submissions["type"])
