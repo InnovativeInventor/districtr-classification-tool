@@ -18,10 +18,20 @@
             </b>
             <p>{{ submission["text"] }}</p>
             <br>
+
+	    <div style="display: flex">
             <input type="radio" id="theory" name="{{ submission["id"] }}" value="theory">
             <label for="theory">theory</label><br>
             <input type="radio" id="coi" name="{{ submission["id"] }}" value="coi">
             <label for="coi">coi</label><br>
+            <input type="radio" id="both" name="{{ submission["id"] }}" value="both">
+            <label for="both">both</label><br>
+            <input type="radio" id="other" name="{{ submission["id"] }}" value="other">
+            <label for="other">other</label><br>
+	    </div>
+
+	    <label for="fname">Keyword (optional):</label><br>
+	    <input type="text" id="key" name="{{ submission["id"] }}-key"><br>
             <br>
             <hr>
             <br>
@@ -30,5 +40,5 @@
         <input type="submit" value="Submit">
 
         </form>
-	 </body>
+	</body>
  </html> 
