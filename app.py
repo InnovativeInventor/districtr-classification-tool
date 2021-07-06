@@ -25,7 +25,7 @@ with open("conf.yaml") as f:
 @app.get("/", response_class=PlainTextResponse)
 async def read_root() -> str:
     return PlainTextResponse(
-        'Go to /{location} (for all submissions) or /{location}/{start-date}/{end-date} to start. E.g. <a href="/michigan">/michigan</a> or <a href="/michigan/2021-5-1/2021-5-7">/michigan/2021-5-1/2021-5-7</a>'
+        'Go to /{location} (for all submissions) or /{location}/{start-date-inclusive}/{end-date-inclusive} to start. E.g. /michigan or /michigan/2021-5-1/2021-5-7'
     )
 
 
