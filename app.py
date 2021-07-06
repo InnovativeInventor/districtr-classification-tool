@@ -104,6 +104,9 @@ async def submit(request: Request, location: str):
 
     classifications = dict(request.query_params)
     data = []
+    written_totals = 0
+    plan_totals = 0
+    coi_totals = 0
 
     for week_start, submissions in all_submissions.groupby(
         pd.Grouper(key="datetime", freq="W-MON", label="left")
@@ -148,6 +151,11 @@ async def submit(request: Request, location: str):
         coi_df = submissions[submissions["type"] == "coi"].fillna("")
         coi = len(coi_df)
         coi_comments = pd.to_numeric(coi_df["numberOfComments"]).sum()
+
+        written_totals += written
+        plan_totals += plan
+        coi_totals += coi
+
         data.append(
             {
                 "week_start": week_start,
@@ -182,6 +190,9 @@ async def submit(request: Request, location: str):
             "request": request,
             "location": location,
             "data": list(enumerate(data, start=1)),
-            "keywords": keywords
+            "keywords": keywords,
+            "written_totals": written_totals,
+            "plan_totals": plan_totals,
+            "coi_totals": coi_totals,
         },
     )
