@@ -137,20 +137,20 @@ async def submit(request: Request, location: str):
                 )
             ]
         ) + written_both
-        written_comments = pd.to_numeric(written_df["numberOfComments"]).sum()
+        written_comments = round(pd.to_numeric(written_df["numberOfComments"]).sum())
 
         districts_df = submissions[submissions["type"] == "written"].fillna("")
 
         plan_df = submissions[submissions["type"] == "plan"].fillna("")
         plan = len(plan_df)
-        plan_comments = pd.to_numeric(plan_df["numberOfComments"]).sum()
+        plan_comments = round(pd.to_numeric(plan_df["numberOfComments"]).sum())
         cd = len(submissions[submissions["districttype"] == "ush"])
         sd = len(submissions[submissions["districttype"] == "ush"])
         hd = len(submissions[submissions["districttype"] == "ush"])
 
         coi_df = submissions[submissions["type"] == "coi"].fillna("")
         coi = len(coi_df)
-        coi_comments = pd.to_numeric(coi_df["numberOfComments"]).sum()
+        coi_comments = round(pd.to_numeric(coi_df["numberOfComments"]).sum())
 
         written_totals += written
         plan_totals += plan
