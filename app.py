@@ -4,7 +4,15 @@ from fastapi.templating import Jinja2Templates
 from dateutil import parser
 import pandas as pd
 import pytz
+import secrets
 import yaml
+from dotenv import dotenv_values
+import time
+import mongoset
+
+config = dotenv_values()
+db = mongoset.connect(config["MONGODB"], config["collection"])
+logs = db["logs"]
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -163,6 +171,10 @@ async def submit(request: Request, location: str):
             sub_id = k.split("-")[0]
             keyword = v.rstrip()
             keywords.append((sub_id, keyword))
+
+    if not logs.insert({"uuid": secrets.token_hex(16), "data": data, "query_params": classifications, "location": location}):
+        time.sleep(0.5)
+        assert logs.insert({"uuid": secrets.token_hex(16), "data": data, "query_params": classifications, "location": location})
 
     return templates.TemplateResponse(
         "render.html",
