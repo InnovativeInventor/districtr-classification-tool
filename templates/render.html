@@ -6,7 +6,7 @@
 	 </head>
 	 <body>
 		 <h1>{{location.title()}} Classification Tool</h1>
-	<h5>Copy this snippet into your .tex file</h5>
+	<h5>Copy these snippet(s) into your .tex file</h5>
 
 	<br>
 	<hr>
@@ -46,11 +46,18 @@
 	</p>
 	{% if keywords %}
 		<br>
+		<hr>
+		<br>
 		{% for id, keyword in keywords%}
 		<p>
 		\example{ {{ id }} }{ {{ keyword }} }
 		</p>
 		{% endfor %}
+	{% else %}
+	<br>
+	<hr>
+	<br>
+	<p><i>No keyword entered.</i></p>
 	{% endif %}
 	<br>
 	<hr>
