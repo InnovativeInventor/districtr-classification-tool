@@ -44,7 +44,7 @@ def nab_submissions(location: str, start=False, stop=False) -> pd.DataFrame:
 
     if start and stop:
         submissions = submissions[
-            submissions["datetime"].apply(lambda x: start < x and x < stop)
+            submissions["datetime"].apply(lambda x: start < x and x <= stop)
         ]
     return submissions
 
