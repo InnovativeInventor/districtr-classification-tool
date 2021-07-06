@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.templating import Jinja2Templates
 from dateutil import parser
+from datetime import timedelta
 import pandas as pd
 import pytz
 import secrets
@@ -44,7 +45,7 @@ def nab_submissions(location: str, start=False, stop=False) -> pd.DataFrame:
 
     if start and stop:
         submissions = submissions[
-            submissions["datetime"].apply(lambda x: start < x and x <= stop)
+            submissions["datetime"].apply(lambda x: start < x and x < (stop + timedelta(1)))
         ]
     return submissions
 
