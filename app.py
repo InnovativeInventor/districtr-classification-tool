@@ -110,7 +110,7 @@ async def submit(request: Request, location: str):
     coi_totals = 0
 
     for week_start, submissions in all_submissions.groupby(
-        pd.Grouper(key="datetime", freq="W-MON", label="left")
+        pd.Grouper(key="datetime", freq="W-SUN", label="left")
     ):
         written_df = submissions[submissions["type"] == "written"].fillna("")
         written = len(written_df)
