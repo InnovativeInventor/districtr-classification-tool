@@ -146,8 +146,8 @@ async def submit(request: Request, location: str):
         plan = len(plan_df)
         plan_comments = round(pd.to_numeric(plan_df["numberOfComments"]).sum())
         cd = len(submissions[submissions["districttype"] == "ush"])
-        sd = len(submissions[submissions["districttype"] == "ush"])
-        hd = len(submissions[submissions["districttype"] == "ush"])
+        sd = len(submissions[submissions["districttype"] == "senate"])
+        hd = len(submissions[submissions["districttype"] == "house"])
 
         coi_df = submissions[submissions["type"] == "coi"].fillna("")
         coi = len(coi_df)
