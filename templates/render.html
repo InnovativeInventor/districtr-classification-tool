@@ -29,7 +29,7 @@
 	{% for count, info in data%}
 		<p>
 		\hline
-		\tablerow{ {{ count }} ({{ info["week_start"].strftime("%m/%d/%y") }}) }{ {{ info["written"] }} }{ {{ info["written_theory"] }} }{ {{ info["written_coi"] }} }{ {{ info["written_comments"] }} }
+		\tablerow{ {{ count }} ({{ info["week_start"].strftime("%m/%d/%y") }} UTC) }{ {{ info["written"] }} }{ {{ info["written_theory"] }} }{ {{ info["written_coi"] }} }{ {{ info["written_comments"] }} }
 		\districtrow{ {{ info["plan"] }} }{ {{ info["cd"] }} }{ {{ info["sd"] }} }{ {{ info["hd"] }} }{ {{ info["plan_comments"] }} }
 		\coirow{ {{ info["coi"] }} }{ {{ info["coi_comments"] }} } \\
 		</p>
